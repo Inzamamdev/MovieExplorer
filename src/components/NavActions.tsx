@@ -1,6 +1,10 @@
+"use client";
 import { MdDarkMode } from "react-icons/md";
-
+import { BsSun } from "react-icons/bs";
+import { useTheme } from "next-themes";
 export default function NavActions({ mobile = false }: { mobile?: boolean }) {
+  const { theme, setTheme } = useTheme();
+  console.log(theme);
   return (
     <div
       className={`items-center gap-3 ${
@@ -20,7 +24,12 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
       >
         Sign In
       </button>
-      <MdDarkMode size={20} className="text-white cursor-pointer" />
+      <button
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        className="p-2 rounded-md hover:bg-gray-700 transition"
+      >
+        {theme === "dark" ? <BsSun size={20} /> : <MdDarkMode size={20} />}
+      </button>
     </div>
   );
 }
