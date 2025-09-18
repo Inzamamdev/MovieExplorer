@@ -1,10 +1,17 @@
 "use client";
 import { MdDarkMode } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
 import { BsSun } from "react-icons/bs";
 import { useTheme } from "next-themes";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import AuthModal from "./AuthModal";
+import Image from "next/image";
 export default function NavActions({ mobile = false }: { mobile?: boolean }) {
   const { theme, setTheme } = useTheme();
-  console.log(theme);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div
       className={`items-center gap-3 ${
@@ -18,12 +25,33 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
         focus:outline-none focus:ring-2 focus:ring-yellow-400 
         ${mobile ? "w-full" : ""}`}
       />
-      <button
-        className={`rounded-md bg-[#141a26] px-3 py-1 text-yellow-400 cursor-pointer
-        ${mobile ? "w-full" : ""}`}
-      >
-        Sign In
-      </button>
+
+      {!session ? (
+        <button
+          className={`rounded-md bg-[#141a26] px-3 py-1 text-yellow-400 cursor-pointer
+          ${mobile ? "w-full" : ""}`}
+          onClick={() => setIsModalOpen(true)}
+        >
+          Sign In
+        </button>
+      ) : (
+        <button
+          className={`rounded-md bg-[#141a26] px-3 py-1 text-yellow-400 flex items-center gap-2 cursor-pointer
+          ${mobile ? "w-full" : ""}`}
+        >
+          {session.user?.image ? (
+            <Image
+              src={session.user.image}
+              alt="profile"
+              className="w-6 h-6 rounded-full"
+            />
+          ) : (
+            <FaUserCircle size={20} />
+          )}
+          <span className="hidden sm:inline">Account</span>
+        </button>
+      )}
+      <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <button
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="p-2 rounded-md hover:bg-gray-700 transition"
