@@ -41,24 +41,25 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
       }`}
     >
       <form onSubmit={handleSearch} className={`${mobile ? "w-full" : ""}`}>
-        <input
-          type="text"
-          placeholder="Search for movies or TV shows"
-          className={`rounded-md bg-[#141a26] px-3 py-1 text-sm text-gray-300 placeholder-gray-500 
-        focus:outline-none focus:ring-2 focus:ring-yellow-400 
-        ${mobile ? "w-full" : ""}`}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        {searchTerm && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className=" text-gray-400 hover:text-gray-200"
-          >
-            <FiX size={18} />
-          </button>
-        )}
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Search for movies or TV shows"
+            className={`w-full rounded-md bg-[#141a26] px-3 py-1 pr-8 text-sm text-gray-300 placeholder-gray-500 
+        focus:outline-none focus:ring-2 focus:ring-yellow-400`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+            >
+              <FiX size={18} />
+            </button>
+          )}
+        </div>
       </form>
       {status == "loading" ? (
         // Skeleton

@@ -51,7 +51,7 @@ export default async function RootLayout({
                 },
               }}
             />
-            <MoviesProvider initialMovies={[]}>
+            <MoviesProvider initialMovies={[initialMovies]}>
               <Nav />
               <main>{children}</main>
             </MoviesProvider>

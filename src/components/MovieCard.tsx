@@ -36,7 +36,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       <Link href={`/movie/${movie.id}`}>
         <div className="p-2">
           <h3 className="text-sm font-semibold truncate">{movie.title}</h3>
-          <p className="text-gray-600">⭐ {movie.vote_average.toFixed(1)}</p>
+          <p className="text-gray-600">⭐ {movie.vote_average?.toFixed(1)}</p>
         </div>
       </Link>
     </div>

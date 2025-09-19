@@ -1,6 +1,9 @@
 // app/movie/[id]/page.tsx
 import Image from "next/image";
-
+export interface Genre {
+  id: number;
+  name: string;
+}
 async function getMovie(id: string) {
   const options = {
     method: "GET",
@@ -50,7 +53,7 @@ export default async function MoviePage({
             </p>
             <p>
               <strong>Genres:</strong>{" "}
-              {movie.genres.map((g: any) => g.name).join(", ")}
+              {movie.genres?.map((g: Genre) => g.name).join(", ")}
             </p>
           </div>
         </div>

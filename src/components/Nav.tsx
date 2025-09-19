@@ -17,11 +17,15 @@ function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("Popular");
   return (
-    <header className="w-full sticky top-0 z-50 bg-[#0b0f19]">
+    <header className="w-full sticky top-0 z-50 bg-[#0b0f19] text-white">
       <div className=" flex items-center justify-between px-4 py-3 md:px-16">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <span className="text-yellow-400 text-xl font-bold">▶ JustWatch</span>
+          <Link href="/">
+            <span className="text-yellow-400 text-xl font-bold">
+              MovieExplorer
+            </span>
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
@@ -59,7 +63,6 @@ function Nav() {
             {isOpen && <NavActions mobile />}
           </nav>
 
-          {/* Actions for desktop */}
           <NavActions />
 
           {/* Menu */}
