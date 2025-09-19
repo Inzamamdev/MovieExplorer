@@ -8,7 +8,7 @@ import { useMovies } from "@/context/MovieContext";
 import MovieSkeleton from "./MovieSkeleton";
 
 export default function MovieList() {
-  const { movies, loadMoreMovies, loading } = useMovies();
+  const { movies, loadMoreMovies, loading, isSearchMode } = useMovies();
   const { ref, inView } = useInView();
 
   // useEffect(() => {
@@ -17,8 +17,10 @@ export default function MovieList() {
   // }, [category, initialMovies]);
 
   useEffect(() => {
-    if (inView) loadMoreMovies();
-  }, [inView]);
+    if (inView && !isSearchMode) {
+      loadMoreMovies();
+    }
+  }, [inView, isSearchMode]);
 
   return (
     <div className="my-5 grid grid-cols-3 md:grid-cols-5 gap-12">

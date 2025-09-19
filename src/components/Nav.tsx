@@ -3,13 +3,15 @@ import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { MdMenu } from "react-icons/md";
 import NavActions from "./NavActions";
-
+import Link from "next/link";
 const navLinks = [
   { name: "Popular", category: "popular" },
   { name: "Now Playing", category: "now_playing" },
   { name: "Top Rated", category: "top_rated" },
   { name: "Upcoming", category: "upcoming" },
 ];
+
+const pages = [{ name: "Favourites", href: "/favourites" }];
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +42,18 @@ function Nav() {
               >
                 {link.name}
               </a>
+            ))}
+            {pages.map((page, index) => (
+              <Link
+                key={index}
+                href={page.href}
+                onClick={() => setActive(page.name)}
+                className={`hover:text-yellow-400 ${
+                  active === page.name ? " text-yellow-400" : ""
+                }`}
+              >
+                {page.name}
+              </Link>
             ))}
             {/* Actions for mobile */}
             {isOpen && <NavActions mobile />}
