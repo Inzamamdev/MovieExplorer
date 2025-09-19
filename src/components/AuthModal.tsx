@@ -44,13 +44,17 @@ export default function AuthModal({
       });
       onClose();
     } else {
-      alert(data.error || "Something went wrong");
+      toast.error(data.error || "Something went wrong");
     }
     setLoading(false);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Email or Password field is empty");
+      return;
+    }
     setLoading(true);
 
     const res = await signIn("credentials", {

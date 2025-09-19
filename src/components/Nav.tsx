@@ -30,7 +30,7 @@ function Nav() {
   };
   return (
     <header className="w-full sticky top-0 z-50 bg-[#0b0f19] text-white">
-      <div className=" flex items-center justify-between px-4 py-3 md:px-16">
+      <div className="flex items-center justify-between px-4 py-3 md:px-16">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Link href="/">
@@ -41,51 +41,59 @@ function Nav() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Navigation */}
           <nav
-            className={`${
-              isOpen
-                ? "flex flex-col absolute top-16 left-0 w-full bg-[#0b0f19] px-4 py-4 space-y-2 md:static md:flex-row md:space-y-0 md:space-x-6 md:bg-transparent"
-                : "hidden md:flex md:space-x-6"
-            }`}
+            className={`z-40 transition-all duration-200
+          ${isOpen ? "flex" : "hidden"} flex-col absolute top-full left-0 w-full
+          bg-[#0b0f19] px-6 py-4 space-y-3 shadow-lg
+          md:static md:flex md:flex-row md:space-x-6 md:space-y-0 md:bg-transparent md:w-auto md:px-0 md:py-0 md:shadow-none`}
           >
             {navLinks.map((link) => (
-              <a
+              <button
                 key={link.name}
                 onClick={() => handleNavClick(link.name)}
-                className={`hover:text-yellow-400 ${
-                  active === link.name ? " text-yellow-400" : ""
-                }`}
+                className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
+              ${active === link.name ? "text-yellow-400" : "text-white"}`}
               >
                 {link.name}
-              </a>
+              </button>
             ))}
-            {pages.map((page, index) => (
+
+            {pages.map((page, idx) => (
               <Link
-                key={index}
+                key={idx}
                 href={page.href}
                 onClick={() => setActive(page.name)}
-                className={`hover:text-yellow-400 ${
-                  active === page.name ? " text-yellow-400" : ""
-                }`}
+                className={`hover:text-yellow-400 transition-colors cursor-pointer
+              ${active === page.name ? "text-yellow-400" : "text-white"}`}
               >
                 {page.name}
               </Link>
             ))}
-            {/* Actions for mobile */}
-            {isOpen && <NavActions mobile />}
+
+            {/* Mobile-only actions: show NavActions only inside dropdown on mobile */}
+            <div className="md:hidden mt-2">
+              <NavActions mobile />
+            </div>
           </nav>
 
-          <NavActions />
+          {/* Desktop actions (hidden on small screens) */}
+          <div className="hidden md:flex md:items-center">
+            <NavActions />
+          </div>
 
-          {/* Menu */}
+          {/* Hamburger / close (mobile only) */}
           <button
-            className="md:hidden text-gray-300 cusor-pointer"
+            className="md:hidden text-gray-300 cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
           >
-            {isOpen ? <RxCross1 /> : <MdMenu />}
+            {isOpen ? <RxCross1 size={24} /> : <MdMenu size={24} />}
           </button>
         </div>
       </div>
+
+      {/* Auth modal */}
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </header>
   );

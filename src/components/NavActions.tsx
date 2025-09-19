@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import AuthModal from "./AuthModal";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import { useMovies } from "@/context/MovieContext";
 
 export default function NavActions({ mobile = false }: { mobile?: boolean }) {
@@ -27,6 +28,10 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
     e.preventDefault();
     if (!session) {
       setIsModalOpen(true); // 🚀 show modal if not logged in
+      return;
+    }
+    if (searchTerm.trim().length > 20) {
+      toast.error("query is longer than 20 characters");
       return;
     }
     await searchMovies(searchTerm);
