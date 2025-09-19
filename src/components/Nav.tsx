@@ -16,7 +16,7 @@ function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("Popular");
   return (
-    <header className="w-full  ">
+    <header className="w-full sticky top-0 z-50 bg-[#0b0f19]">
       <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo */}
         <div className="flex items-center space-x-2">

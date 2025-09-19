@@ -2,10 +2,11 @@
 
 import { signIn } from "next-auth/react";
 import Image from "next/image";
+import { ReactNode } from "react";
 interface AuthButtonProps {
   provider: "google" | "github" | "facebook" | string;
   label: string;
-  iconSrc?: string;
+  iconSrc?: ReactNode;
 }
 
 export default function AuthButton({
@@ -18,7 +19,7 @@ export default function AuthButton({
       onClick={() => signIn(provider)}
       className="w-full flex items-center justify-center gap-2 rounded-md border border-gray-300 dark:border-gray-600 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
     >
-      {iconSrc && <Image src={iconSrc} alt={label} className="w-5 h-5" />}
+      {iconSrc}
       {label}
     </button>
   );

@@ -3,6 +3,8 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { supabase } from "@/config/supabase";
+import { CredentialsSignin } from "next-auth";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
@@ -24,13 +26,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .eq("email", credentials.email)
           .single();
         console.log(user);
-        if (error || !user) return null;
+        if (error || !user)
+          throw new CredentialsSignin("No user found with this email");
 
         const isValid = await bcrypt.compare(
           String(credentials?.password),
           user.password_hash
         );
-        if (!isValid) return null;
+        if (!isValid) throw new CredentialsSignin("Invalid password");
 
         return { id: user.id, email: user.email };
       },
@@ -39,6 +42,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if (!user) {
+        throw new Error("Account not found");
+      }
+      return true;
+    },
     async jwt({ token, user, profile }) {
       if (user) {
         token.id = user.id ?? profile?.sub; // Credentials user.id or Google sub

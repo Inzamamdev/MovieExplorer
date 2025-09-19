@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import AuthButton from "./AuthButton";
-
+import { useSession, signOut } from "next-auth/react";
+import { BsGoogle } from "react-icons/bs";
+import toast from "react-hot-toast";
 export default function AuthModal({
   isOpen,
   onClose,
@@ -15,6 +17,7 @@ export default function AuthModal({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
 
   if (!isOpen) return null;
 
@@ -52,9 +55,17 @@ export default function AuthModal({
     });
 
     if (res?.error) {
-      alert(res.error);
+      console.log(res);
+      if (res.error === "Account not found") {
+        toast.error("No account found with this email.");
+      } else if (res.error === "Invalid password") {
+        toast.error("Incorrect password. Try again.");
+      } else {
+        toast.error("Sign in failed. Please try again.");
+      }
     } else {
       onClose();
+      toast.success("Signed in successfully!");
     }
     setLoading(false);
   };
@@ -62,85 +73,96 @@ export default function AuthModal({
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
       <div className="bg-white dark:bg-[#141a26] rounded-xl shadow-lg w-[90%] max-w-md p-6">
         {/* Tabs */}
-        <div className="flex mb-6 justify-around">
-          <button
-            onClick={() => setActiveTab("signin")}
-            className={`flex-1 py-2 rounded-md ${
-              activeTab === "signin"
-                ? "bg-yellow-400 text-black font-semibold"
-                : "bg-gray-200 dark:bg-gray-700 dark:text-white"
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            onClick={() => setActiveTab("signup")}
-            className={`flex-1 py-2 rounded-md ${
-              activeTab === "signup"
-                ? "bg-yellow-400 text-black font-semibold"
-                : "bg-gray-200 dark:bg-gray-700 dark:text-white"
-            }`}
-          >
-            Create Account
-          </button>
-        </div>
-        <form
-          onSubmit={activeTab === "signin" ? handleLogin : handleRegister}
-          className="space-y-3"
-        >
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-md bg-yellow-400 text-black font-medium py-2 hover:bg-yellow-500"
-          >
-            {loading
-              ? "Loading..."
-              : activeTab === "signin"
-              ? "Sign In"
-              : "Create Account"}
-          </button>
-        </form>
-
-        {/* Content */}
-        {activeTab === "signin" ? (
-          <div className="flex flex-col gap-4">
-            <AuthButton
-              provider="google"
-              label="Sign in with Google"
-              iconSrc="/google-icon.svg"
-            />
+        {session ? (
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              Logged in as: {session.user?.email}
+            </p>
+            <button
+              onClick={() => signOut()}
+              className="w-full rounded-md bg-red-500 text-white py-2 hover:bg-red-600"
+            >
+              Logout
+            </button>
+            <button
+              onClick={onClose}
+              className="mt-2 w-full rounded-md bg-gray-300 dark:bg-gray-700 text-black dark:text-white py-2 hover:bg-gray-400 dark:hover:bg-gray-600"
+            >
+              Close
+            </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            <AuthButton
-              provider="google"
-              label="Create Account with Google"
-              iconSrc="/google-icon.svg"
-            />
-          </div>
-        )}
+          <>
+            <div className="flex mb-6 justify-around">
+              <button
+                onClick={() => setActiveTab("signin")}
+                className={`flex-1 py-2 rounded-md ${
+                  activeTab === "signin"
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "bg-gray-200 dark:bg-gray-700 dark:text-white"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => setActiveTab("signup")}
+                className={`flex-1 py-2 rounded-md ${
+                  activeTab === "signup"
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "bg-gray-200 dark:bg-gray-700 dark:text-white"
+                }`}
+              >
+                Create Account
+              </button>
+            </div>
+            <form
+              onSubmit={activeTab === "signin" ? handleLogin : handleRegister}
+              className="space-y-3"
+            >
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-md bg-yellow-400 text-black font-medium py-2 hover:bg-yellow-500"
+              >
+                {loading
+                  ? "Loading..."
+                  : activeTab === "signin"
+                  ? "Sign In"
+                  : "Create Account"}
+              </button>
+            </form>
 
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="mt-6 w-full rounded-md bg-red-500 text-white py-2 hover:bg-red-600"
-        >
-          Close
-        </button>
+            <div className="flex flex-col gap-4">
+              <AuthButton
+                provider="google"
+                label="Continue with Google"
+                iconSrc={<BsGoogle />}
+              />
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="mt-6 w-full rounded-md bg-red-500 text-white py-2 hover:bg-red-600"
+            >
+              Close
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

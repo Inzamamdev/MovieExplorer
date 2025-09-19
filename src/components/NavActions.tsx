@@ -10,7 +10,7 @@ import Image from "next/image";
 export default function NavActions({ mobile = false }: { mobile?: boolean }) {
   const { theme, setTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   console.log(session);
   return (
     <div
@@ -26,7 +26,14 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
         ${mobile ? "w-full" : ""}`}
       />
 
-      {!session ? (
+      {status == "loading" ? (
+        // Skeleton
+        <div
+          className={`h-9 w-20 rounded-md bg-gray-700 animate-pulse ${
+            mobile ? "w-full" : ""
+          }`}
+        />
+      ) : !session ? (
         <button
           className={`rounded-md bg-[#141a26] px-3 py-1 text-yellow-400 cursor-pointer
           ${mobile ? "w-full" : ""}`}
@@ -38,12 +45,15 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
         <button
           className={`rounded-md bg-[#141a26] px-3 py-1 text-yellow-400 flex items-center gap-2 cursor-pointer
           ${mobile ? "w-full" : ""}`}
+          onClick={() => setIsModalOpen(true)}
         >
           {session.user?.image ? (
             <Image
               src={session.user.image}
               alt="profile"
-              className="w-6 h-6 rounded-full"
+              height={20}
+              width={20}
+              className=" rounded-full"
             />
           ) : (
             <FaUserCircle size={20} />

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Nav from "@/components/Nav";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,8 +36,19 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem={true}
           >
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                success: {
+                  style: { background: "green", color: "white" },
+                },
+                error: {
+                  style: { background: "red", color: "white" },
+                },
+              }}
+            />
             <Nav />
-            {children}
+            <main className="mx-auto max-w-7xl px-4 md:px-8">{children}</main>
           </ThemeProvider>
         </SessionProvider>
       </body>
