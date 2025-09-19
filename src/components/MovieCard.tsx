@@ -44,7 +44,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
         alt={movie.title}
         width={200}
         height={300}
-        className="rounded-t-lg"
+        className="rounded-t-lg w-full"
       />
       <button
         onClick={handleFavoriteClick}
