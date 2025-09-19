@@ -37,7 +37,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
     }
   };
   return (
-    <div className="w-48 rounded-lg shadow-md overflow-hidden relative">
+    <div className="w-full sm:w-48 rounded-lg shadow-md overflow-hidden relative">
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Image
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -50,11 +50,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
         onClick={handleFavoriteClick}
         className="absolute top-2 right-2 text-red-500 hover:scale-110 transition-transform cursor-pointer"
       >
-        {isFavorite ? (
-          <FaHeart size={22} /> // filled heart
-        ) : (
-          <FaRegHeart size={22} /> // outlined heart
-        )}
+        {isFavorite ? <FaHeart size={22} /> : <FaRegHeart size={22} />}
       </button>
       <Link href={`/movie/${movie.id}`} onClick={handleCardClick}>
         <div className="p-2">
