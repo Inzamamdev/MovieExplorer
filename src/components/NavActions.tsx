@@ -17,7 +17,6 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
   const { searchMovies, resetMovies } = useMovies();
   const [searchTerm, setSearchTerm] = useState("");
 
-  console.log(searchTerm);
   useEffect(() => {
     if (searchTerm.trim() === "") {
       resetMovies();
@@ -26,6 +25,10 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!session) {
+      setIsModalOpen(true); // 🚀 show modal if not logged in
+      return;
+    }
     await searchMovies(searchTerm);
   };
 
@@ -33,7 +36,13 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
     setSearchTerm("");
     resetMovies();
   };
-  console.log(session);
+
+  const handleInputClick = () => {
+    if (!session) {
+      setIsModalOpen(true); // 🚀 show modal if not logged in
+    }
+  };
+
   return (
     <div
       className={`items-center gap-3 ${
@@ -49,6 +58,8 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
         focus:outline-none focus:ring-2 focus:ring-yellow-400`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onClick={handleInputClick} // 🚀 trigger modal if not logged in
+            readOnly={!session}
           />
           {searchTerm && (
             <button
@@ -99,7 +110,7 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <button
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="p-2 rounded-md hover:bg-gray-700 transition"
+        className="p-2 rounded-md hover:bg-gray-700 transition cursor-pointer"
       >
         {theme === "dark" ? <BsSun size={20} /> : <MdDarkMode size={20} />}
       </button>
