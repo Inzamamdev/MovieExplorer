@@ -23,6 +23,11 @@ export default function AuthModal({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("Email or Password field is empty");
+      return;
+    }
     setLoading(true);
 
     const res = await fetch("/api/register", {
