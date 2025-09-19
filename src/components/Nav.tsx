@@ -5,11 +5,10 @@ import { MdMenu } from "react-icons/md";
 import NavActions from "./NavActions";
 
 const navLinks = [
-  { name: "Home", href: "#" },
-  { name: "Popular", href: "#" },
-  { name: "Now Playing", href: "#" },
-  { name: "Top Rated", href: "#" },
-  { name: "Upcoming", href: "#" },
+  { name: "Popular", category: "popular" },
+  { name: "Now Playing", category: "now_playing" },
+  { name: "Top Rated", category: "top_rated" },
+  { name: "Upcoming", category: "upcoming" },
 ];
 
 function Nav() {
@@ -17,7 +16,7 @@ function Nav() {
   const [active, setActive] = useState("Popular");
   return (
     <header className="w-full sticky top-0 z-50 bg-[#0b0f19]">
-      <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3 md:px-8">
+      <div className=" flex items-center justify-between px-4 py-3 md:px-16">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <span className="text-yellow-400 text-xl font-bold">▶ JustWatch</span>
@@ -34,7 +33,6 @@ function Nav() {
             {navLinks.map((link) => (
               <a
                 key={link.name}
-                href={link.href}
                 onClick={() => setActive(link.name)}
                 className={`hover:text-yellow-400 ${
                   active === link.name ? " text-yellow-400" : ""

@@ -4,41 +4,24 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import MovieCard from "./MovieCard";
-import { getMovies } from "@/app/actions/getMovies";
+import { useMovies } from "@/context/MovieContext";
 import MovieSkeleton from "./MovieSkeleton";
 
-type Movie = {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average: number;
-};
-
-type MovieListProps = {
-  initialMovies: Movie[];
-};
-
-export default function MovieList({ initialMovies }: MovieListProps) {
-  const [movies, setMovies] = useState<Movie[]>(initialMovies);
-  const [page, setPage] = useState(2);
+export default function MovieList() {
+  const { movies, loadMoreMovies, loading } = useMovies();
   const { ref, inView } = useInView();
-  const [loading, setLoading] = useState(false);
 
-  const loadMoreMovies = async () => {
-    if (loading) return;
-    setLoading(true);
-    const apiMovies = await getMovies(page);
-    setMovies((prev) => [...prev, ...apiMovies]);
-    setPage((prev) => prev + 1);
-    setLoading(false);
-  };
+  // useEffect(() => {
+  //   setMovies(initialMovies);
+  //   setPage(2);
+  // }, [category, initialMovies]);
 
   useEffect(() => {
     if (inView) loadMoreMovies();
   }, [inView]);
 
   return (
-    <div className="grid grid-cols-3 md:grid-cols-5 gap-12">
+    <div className="my-5 grid grid-cols-3 md:grid-cols-5 gap-12">
       {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
       ))}
