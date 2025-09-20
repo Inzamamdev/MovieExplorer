@@ -37,6 +37,13 @@ function Nav() {
     }
     setActive(linkName);
   };
+
+  const handlePageClick = () => {
+    if (!session) {
+      setIsModalOpen(true);
+      return;
+    }
+  };
   return (
     <header className="w-full sticky top-0 z-50 bg-[#0b0f19] text-white">
       <div className="flex items-center justify-between px-4 py-3 md:px-16">
@@ -73,7 +80,8 @@ function Nav() {
             {pages.map((page, idx) => (
               <Link
                 key={idx}
-                href={page.href}
+                href={session ? page.href : ""}
+                onClick={handlePageClick}
                 // onClick={() => setActive(page.name)}
                 className={`hover:text-yellow-400 transition-colors cursor-pointer
               ${page.href === path ? "text-yellow-400" : "text-white"}`}
