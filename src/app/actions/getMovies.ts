@@ -1,7 +1,6 @@
 "use server";
 
 export const getMovies = async (category: string, page = 1) => {
-  console.log("cate", category);
   const url = `https://api.themoviedb.org/3/movie/${category}?&page=${page}`;
   const options = {
     method: "GET",

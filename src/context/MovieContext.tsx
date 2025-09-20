@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { getMovies } from "@/app/actions/getMovies";
 import { searchMoviesAPI } from "@/app/actions/getMovies";
 
@@ -30,7 +37,7 @@ type MoviesContextType = {
   isSearchMode: boolean;
   loading: boolean;
   active: NavLinK;
-  setActive: Function;
+  setActive: Dispatch<SetStateAction<NavLinK>>;
 };
 
 const MoviesContext = createContext<MoviesContextType | null>(null);
