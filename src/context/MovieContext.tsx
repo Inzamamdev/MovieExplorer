@@ -15,6 +15,11 @@ type MovieListProps = {
   initialMovies: Movie[];
 };
 
+type NavLinK = {
+  name: string;
+  category: string;
+};
+
 type MoviesContextType = {
   movies: Movie[];
   loadMoreMovies: () => Promise<void>;
@@ -24,6 +29,8 @@ type MoviesContextType = {
   toggleFavorite: (movie: Movie) => void;
   isSearchMode: boolean;
   loading: boolean;
+  active: NavLinK;
+  setActive: Function;
 };
 
 const MoviesContext = createContext<MoviesContextType | null>(null);
@@ -40,6 +47,15 @@ export function MoviesProvider({
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [active, setActive] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("activeCategory");
+      if (stored) return JSON.parse(stored);
+    }
+    return { name: "Popular", category: "popular" };
+  });
+
+  console.log(active);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
@@ -52,6 +68,12 @@ export function MoviesProvider({
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    // setMovies([]);
+    localStorage.setItem("activeCategory", JSON.stringify(active));
+    resetMovies();
+  }, [active]);
 
   const toggleFavorite = (movie: Movie) => {
     setFavorites((prev) => {
@@ -66,7 +88,7 @@ export function MoviesProvider({
   const loadMoreMovies = async () => {
     if (loading) return;
     setLoading(true);
-    const apiMovies = await getMovies(page);
+    const apiMovies = await getMovies(active.category, page);
     setMovies((prev) => [...prev, ...apiMovies]);
     setPage((prev) => prev + 1);
     setLoading(false);
@@ -87,7 +109,7 @@ export function MoviesProvider({
 
   const resetMovies = async () => {
     setLoading(true);
-    const freshMovies = await getMovies(1);
+    const freshMovies = await getMovies(active.category, 1);
     setMovies(freshMovies);
     setPage(2);
     setIsSearchMode(false);
@@ -105,6 +127,8 @@ export function MoviesProvider({
         loading,
         favorites,
         toggleFavorite,
+        active,
+        setActive,
       }}
     >
       {children}

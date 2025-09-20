@@ -28,7 +28,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const INITIAL_PAGE = 1;
-  const initialMovies = await getMovies(INITIAL_PAGE);
+  const category = "popular";
+  const initialMovies = await getMovies(category, INITIAL_PAGE);
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -51,7 +52,7 @@ export default async function RootLayout({
                 },
               }}
             />
-            <MoviesProvider initialMovies={[initialMovies]}>
+            <MoviesProvider initialMovies={initialMovies}>
               <Nav />
               <main>{children}</main>
             </MoviesProvider>

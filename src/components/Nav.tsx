@@ -4,8 +4,14 @@ import { RxCross1 } from "react-icons/rx";
 import { MdMenu } from "react-icons/md";
 import NavActions from "./NavActions";
 import { useSession } from "next-auth/react";
+import { useMovies } from "@/context/MovieContext";
 import AuthModal from "./AuthModal";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+type NavLinK = {
+  name: string;
+  category: string;
+};
 const navLinks = [
   { name: "Popular", category: "popular" },
   { name: "Now Playing", category: "now_playing" },
@@ -17,11 +23,14 @@ const pages = [{ name: "Favourites", href: "/favourites" }];
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [active, setActive] = useState("Popular");
+  // const [active, setActive] = useState("Popular");
+  const { active, setActive } = useMovies();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
-
-  const handleNavClick = (linkName: string) => {
+  const path = usePathname();
+  const router = useRouter();
+  console.log(router);
+  const handleNavClick = (linkName: NavLinK) => {
     if (!session) {
       setIsModalOpen(true);
       return;
@@ -48,24 +57,26 @@ function Nav() {
           bg-[#0b0f19] px-6 py-4 space-y-3 shadow-lg
           md:static md:flex md:flex-row md:space-x-6 md:space-y-0 md:bg-transparent md:w-auto md:px-0 md:py-0 md:shadow-none`}
           >
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavClick(link.name)}
-                className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
-              ${active === link.name ? "text-yellow-400" : "text-white"}`}
-              >
-                {link.name}
-              </button>
-            ))}
+            {path !== "/favourites"
+              ? navLinks.map((link) => (
+                  <button
+                    key={link.name}
+                    onClick={() => handleNavClick(link)}
+                    className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
+              ${active.name === link.name ? "text-yellow-400" : "text-white"}`}
+                  >
+                    {link.name}
+                  </button>
+                ))
+              : ""}
 
             {pages.map((page, idx) => (
               <Link
                 key={idx}
                 href={page.href}
-                onClick={() => setActive(page.name)}
+                // onClick={() => setActive(page.name)}
                 className={`hover:text-yellow-400 transition-colors cursor-pointer
-              ${active === page.name ? "text-yellow-400" : "text-white"}`}
+              ${page.href === path ? "text-yellow-400" : "text-white"}`}
               >
                 {page.name}
               </Link>
