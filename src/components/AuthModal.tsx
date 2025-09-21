@@ -24,7 +24,7 @@ export default function AuthModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 p-4">
-      <div className="bg-white dark:bg-[#141a26] rounded-xl shadow-lg w-full max-w-md p-6 space-y-6">
+      <div className="bg-black dark:bg-[#141a26] rounded-xl shadow-lg w-full max-w-md p-6 space-y-6">
         {/* Logged-in view */}
         {session ? (
           <div className="flex flex-col items-center gap-4">
@@ -53,7 +53,7 @@ export default function AuthModal({
                 className={`flex-1 py-2 rounded-md transition-colors cursor-pointer ${
                   activeTab === "signin"
                     ? "bg-yellow-400 text-black font-semibold"
-                    : "bg-gray-200 dark:bg-gray-700 dark:text-white"
+                    : "bg-gray-700 dark:text-white"
                 }`}
               >
                 Sign In
@@ -63,7 +63,7 @@ export default function AuthModal({
                 className={`flex-1 py-2 rounded-md transition-colors cursor-pointer ${
                   activeTab === "signup"
                     ? "bg-yellow-400 text-black font-semibold"
-                    : "bg-gray-200 dark:bg-gray-700 dark:text-white"
+                    : "bg-gray-700 dark:text-white"
                 }`}
               >
                 Create Account
@@ -84,14 +84,14 @@ export default function AuthModal({
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
+                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-800"
               />
               <input
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800"
+                className="w-full rounded-md border px-3 py-2 text-sm bg-gray-800"
               />
               <button
                 type="submit"
