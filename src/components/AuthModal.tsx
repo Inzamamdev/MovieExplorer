@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import AuthButton from "./AuthButton";
 import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "@/hooks/useAuth";
 import { BsGoogle } from "react-icons/bs";
 import toast from "react-hot-toast";
 export default function AuthModal({
@@ -16,61 +17,11 @@ export default function AuthModal({
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { login, register, loading } = useAuth(onClose);
   const { data: session } = useSession();
 
   if (!isOpen) return null;
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      toast.error("Email or Password field is empty");
-      return;
-    }
-    setLoading(true);
-
-    const res = await fetch("/api/register", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-      onClose();
-    } else {
-      toast.error(data.error || "Something went wrong");
-    }
-    setLoading(false);
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) {
-      toast.error("Email or Password field is empty");
-      return;
-    }
-    setLoading(true);
-
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (res?.error) {
-      toast.error("Sign in failed. Please try again.");
-    } else {
-      onClose();
-      toast.success("Signed in successfully!");
-    }
-    setLoading(false);
-  };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 p-4">
       <div className="bg-white dark:bg-[#141a26] rounded-xl shadow-lg w-full max-w-md p-6 space-y-6">
@@ -121,7 +72,11 @@ export default function AuthModal({
 
             {/* Form */}
             <form
-              onSubmit={activeTab === "signin" ? handleLogin : handleRegister}
+              onSubmit={(e) =>
+                activeTab === "signin"
+                  ? login(e, email, password)
+                  : register(e, email, password)
+              }
               className="flex flex-col gap-4"
             >
               <input
