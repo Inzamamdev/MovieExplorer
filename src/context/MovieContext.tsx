@@ -62,8 +62,6 @@ export function MoviesProvider({
     return { name: "Popular", category: "popular" };
   });
 
-  console.log(active);
-
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
