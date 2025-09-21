@@ -28,7 +28,7 @@ export default function AuthModal({
         {/* Logged-in view */}
         {session ? (
           <div className="flex flex-col items-center gap-4">
-            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 text-center">
+            <p className="text-lg font-semibold text-gray-200 text-center">
               Logged in as: {session.user?.email}
             </p>
             <button
