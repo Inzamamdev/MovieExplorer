@@ -37,7 +37,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
     }
   };
   return (
-    <div className="w-full sm:w-48 rounded-lg shadow-md overflow-hidden relative">
+    <div className="w-full sm:w-48 rounded-lg shadow-md dark:shadow-gray-800 overflow-hidden relative">
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Image
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
