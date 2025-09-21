@@ -45,7 +45,7 @@ MovieExplorer is a modern web application for exploring, searching, and saving y
 
 3. **Configure environment variables:**
 
-   - Copy `.env.example` to `.env.local` and fill in your Supabase and NextAuth credentials.
+   - Copy this to your `.env.local` and fill in your Supabase and NextAuth credentials.
    - Example:
      ```env
      NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
