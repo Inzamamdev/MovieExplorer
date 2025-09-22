@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { MdMenu } from "react-icons/md";
 import NavActions from "./NavActions";
@@ -23,19 +23,20 @@ const pages = [{ name: "Favourites", href: "/favourites" }];
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
-  // const [active, setActive] = useState("Popular");
   const { active, setActive } = useMovies();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
   const path = usePathname();
   const router = useRouter();
   console.log(router);
+
   const handleNavClick = (linkName: NavLinK) => {
     if (!session) {
       setIsModalOpen(true);
       return;
     }
     setActive(linkName);
+    router.push("/");
   };
 
   const handlePageClick = () => {
@@ -64,18 +65,16 @@ function Nav() {
           bg-[#0b0f19] px-6 py-4 space-y-3 shadow-lg
           md:static md:flex md:flex-row md:space-x-6 md:space-y-0 md:bg-transparent md:w-auto md:px-0 md:py-0 md:shadow-none`}
           >
-            {path !== "/favourites" && "/movie"
-              ? navLinks.map((link) => (
-                  <button
-                    key={link.name}
-                    onClick={() => handleNavClick(link)}
-                    className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
-              ${active.name === link.name ? "text-yellow-400" : "text-white"}`}
-                  >
-                    {link.name}
-                  </button>
-                ))
-              : ""}
+            {navLinks.map((link) => (
+              <button
+                key={link.name}
+                onClick={() => handleNavClick(link)}
+                className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
+              ${active?.name === link.name ? "text-yellow-400" : "text-white"}`}
+              >
+                {link.name}
+              </button>
+            ))}
 
             {pages.map((page, idx) => (
               <Link

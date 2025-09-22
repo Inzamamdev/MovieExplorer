@@ -22,7 +22,7 @@ export default async function MoviePage({
 }: {
   params: { id: string };
 }) {
-  const movie = await getMovie(params.id);
+  const movie = await getMovie(params?.id);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -37,7 +37,7 @@ export default async function MoviePage({
 
         <div>
           <h1 className="text-3xl font-bold mb-2">{movie.title}</h1>
-          <p className="text-gray-400 mb-4">{movie.tagline}</p>
+          <p className=" mb-4">{movie.tagline}</p>
 
           <p className="mb-4">{movie.overview}</p>
 

@@ -10,7 +10,7 @@ import {
 } from "react";
 import { getMovies } from "@/app/actions/getMovies";
 import { searchMoviesAPI } from "@/app/actions/getMovies";
-
+import { usePathname } from "next/navigation";
 type Movie = {
   id: number;
   title: string;
@@ -37,7 +37,7 @@ type MoviesContextType = {
   isSearchMode: boolean;
   loading: boolean;
   active: NavLinK;
-  setActive: Dispatch<SetStateAction<NavLinK>>;
+  setActive: Dispatch<SetStateAction<NavLinK | null>>;
 };
 
 const MoviesContext = createContext<MoviesContextType | null>(null);
@@ -61,7 +61,14 @@ export function MoviesProvider({
     }
     return { name: "Popular", category: "popular" };
   });
+  const pathname = usePathname(); // ✅ get current route
 
+  // Reset active navlink when route changes
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActive(null); // ✅ reset if user navigates away from home
+    }
+  }, [pathname]);
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
