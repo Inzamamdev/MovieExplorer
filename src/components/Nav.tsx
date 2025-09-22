@@ -64,7 +64,7 @@ function Nav() {
           bg-[#0b0f19] px-6 py-4 space-y-3 shadow-lg
           md:static md:flex md:flex-row md:space-x-6 md:space-y-0 md:bg-transparent md:w-auto md:px-0 md:py-0 md:shadow-none`}
           >
-            {path !== "/favourites"
+            {path !== "/favourites" && "/movie"
               ? navLinks.map((link) => (
                   <button
                     key={link.name}
