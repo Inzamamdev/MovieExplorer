@@ -121,7 +121,7 @@ export function MoviesProvider({
 
   const resetMovies = async () => {
     setLoading(true);
-    const freshMovies = await getMovies(active.category, 1);
+    const freshMovies = await getMovies(active?.category, 1);
     setMovies(freshMovies);
     setPage(2);
     setIsSearchMode(false);

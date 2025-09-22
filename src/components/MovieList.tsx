@@ -11,11 +11,6 @@ export default function MovieList() {
   const { movies, loadMoreMovies, loading, isSearchMode } = useMovies();
   const { ref, inView } = useInView();
 
-  // useEffect(() => {
-  //   setMovies(initialMovies);
-  //   setPage(2);
-  // }, [category, initialMovies]);
-
   useEffect(() => {
     if (inView && !isSearchMode) {
       loadMoreMovies();
