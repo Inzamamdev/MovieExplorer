@@ -6,15 +6,11 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-  if (
-    req.nextUrl.pathname.startsWith("/favourites") ||
-    (req.nextUrl.pathname.startsWith("/movie") && !token)
-  ) {
-    const url = new URL("/", req.url);
-    return NextResponse.redirect(url);
+  if (token) {
+    return NextResponse.next();
   }
-
-  return NextResponse.next();
+  const url = new URL("/", req.url);
+  return NextResponse.redirect(url);
 }
 
 export const config = {

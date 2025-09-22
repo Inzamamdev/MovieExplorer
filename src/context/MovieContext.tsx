@@ -54,6 +54,7 @@ export function MoviesProvider({
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const pathname = usePathname();
   const [active, setActive] = useState(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("activeCategory");
@@ -61,14 +62,19 @@ export function MoviesProvider({
     }
     return { name: "Popular", category: "popular" };
   });
-  const pathname = usePathname(); // ✅ get current route
-
+  // ✅ get current route
+  console.log(pathname);
   // Reset active navlink when route changes
   useEffect(() => {
-    if (pathname !== "/") {
-      setActive(null); // ✅ reset if user navigates away from home
+    if (pathname === "/") {
+      if (!active) {
+        setActive({ name: "Popular", category: "popular" });
+      }
+    } else {
+      setActive(null);
     }
   }, [pathname]);
+
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
@@ -111,7 +117,7 @@ export function MoviesProvider({
       await resetMovies();
       return;
     }
-    console.log(query);
+
     setLoading(true);
     const results = await searchMoviesAPI(query);
     setMovies(results);
