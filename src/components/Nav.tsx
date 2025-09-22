@@ -28,7 +28,6 @@ function Nav() {
   const { data: session, status } = useSession();
   const path = usePathname();
   const router = useRouter();
-  console.log(router);
 
   const handleNavClick = (linkName: NavLinK) => {
     if (!session) {
