@@ -58,9 +58,13 @@ export function MoviesProvider({
   const [active, setActive] = useState(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("activeCategory");
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        return JSON.parse(stored);
+      }
     }
-    // return { name: "Popular", category: "popular" };
+
+    // Default only if we're on home
+    return pathname === "/" ? { name: "Popular", category: "popular" } : null;
   });
   // ✅ get current route
   console.log(pathname);
