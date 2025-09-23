@@ -4,6 +4,7 @@ export default function MovieSkeleton() {
       className="
         w-full sm:w-[45%] md:w-48
         rounded-lg shadow-md overflow-hidden animate-pulse
+        dark:shadow-gray-800
       "
     >
       {/* Poster placeholder */}

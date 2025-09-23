@@ -60,7 +60,7 @@ export function MoviesProvider({
       const stored = localStorage.getItem("activeCategory");
       if (stored) return JSON.parse(stored);
     }
-    return { name: "Popular", category: "popular" };
+    // return { name: "Popular", category: "popular" };
   });
   // ✅ get current route
   console.log(pathname);
@@ -90,6 +90,7 @@ export function MoviesProvider({
   useEffect(() => {
     // setMovies([]);
     localStorage.setItem("activeCategory", JSON.stringify(active));
+
     resetMovies();
   }, [active]);
 
@@ -104,6 +105,7 @@ export function MoviesProvider({
   };
 
   const loadMoreMovies = async () => {
+    if (active?.category == null) return;
     if (loading) return;
     setLoading(true);
     const apiMovies = await getMovies(active.category, page);
@@ -126,6 +128,7 @@ export function MoviesProvider({
   };
 
   const resetMovies = async () => {
+    if (active?.category == null) return;
     setLoading(true);
     const freshMovies = await getMovies(active?.category, 1);
     setMovies(freshMovies);
