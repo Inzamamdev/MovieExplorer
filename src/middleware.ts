@@ -1,17 +1,13 @@
-// export { auth as middleware } from "@/app/auth";
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  console.log(token);
-  if (token) {
-    return NextResponse.next();
+import { auth } from "./app/auth";
+
+export default auth((req) => {
+  // If no session, redirect to home
+  if (!req.auth) {
+    return Response.redirect(new URL("/", req.url));
   }
-  const url = new URL("/", req.url);
-  return NextResponse.redirect(url);
-}
+
+  return;
+});
 
 export const config = {
   matcher: ["/favourites", "/movie/:path*"],
