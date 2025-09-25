@@ -69,7 +69,11 @@ function Nav() {
                 key={link.name}
                 onClick={() => handleNavClick(link)}
                 className={`text-left md:text-center hover:text-yellow-400 transition-colors cursor-pointer
-              ${active?.name === link.name ? "text-yellow-400" : "text-white"}`}
+              ${
+                active?.name === link.name && path == "/"
+                  ? "text-yellow-400"
+                  : "text-white"
+              }`}
               >
                 {link.name}
               </button>

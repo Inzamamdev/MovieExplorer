@@ -6,16 +6,17 @@ import { useInView } from "react-intersection-observer";
 import MovieCard from "./MovieCard";
 import { useMovies } from "@/context/MovieContext";
 import MovieSkeleton from "./MovieSkeleton";
+import { usePathname } from "next/navigation";
 
 export default function MovieList() {
   const { movies, loadMoreMovies, loading, isSearchMode } = useMovies();
   const { ref, inView } = useInView();
-
+  const path = usePathname();
   useEffect(() => {
     if (inView && !isSearchMode) {
       loadMoreMovies();
     }
-  }, [inView, isSearchMode]);
+  }, [inView]);
 
   return (
     <div className="my-5 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-10">

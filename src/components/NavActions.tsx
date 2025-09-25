@@ -1,9 +1,7 @@
 "use client";
-import { MdDarkMode } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
-import { BsSun } from "react-icons/bs";
 import { FiX } from "react-icons/fi";
-import { useTheme } from "next-themes";
+import ThemeIcon from "./ThemeIcon";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import AuthModal from "./AuthModal";
@@ -12,10 +10,9 @@ import toast from "react-hot-toast";
 import { useMovies } from "@/context/MovieContext";
 
 export default function NavActions({ mobile = false }: { mobile?: boolean }) {
-  const { theme, setTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
-  const { searchMovies, resetMovies } = useMovies();
+  const { searchMovies, resetMovies, setIsSearchMode } = useMovies();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -27,7 +24,7 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) {
-      setIsModalOpen(true); // 🚀 show modal if not logged in
+      setIsModalOpen(true);
       return;
     }
     if (searchTerm.trim().length > 20) {
@@ -39,12 +36,13 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
 
   const handleClear = () => {
     setSearchTerm("");
+    setIsSearchMode(false);
     resetMovies();
   };
 
   const handleInputClick = () => {
     if (!session) {
-      setIsModalOpen(true); // 🚀 show modal if not logged in
+      setIsModalOpen(true);
     }
   };
 
@@ -80,7 +78,7 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
       {status == "loading" ? (
         // Skeleton
         <div
-          className={`h-9 w-20 rounded-md bg-gray-700 animate-pulse ${
+          className={`h-9 w-[110px] rounded-md bg-gray-700 animate-pulse ${
             mobile ? "w-full" : ""
           }`}
         />
@@ -113,12 +111,7 @@ export default function NavActions({ mobile = false }: { mobile?: boolean }) {
         </button>
       )}
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <button
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="p-2 rounded-md hover:bg-gray-700 transition cursor-pointer"
-      >
-        {theme === "dark" ? <BsSun size={20} /> : <MdDarkMode size={20} />}
-      </button>
+      <ThemeIcon />
     </div>
   );
 }

@@ -37,6 +37,7 @@ type MoviesContextType = {
   isSearchMode: boolean;
   loading: boolean;
   active: NavLinK;
+  setIsSearchMode: Dispatch<SetStateAction<boolean>>;
   setActive: Dispatch<SetStateAction<NavLinK | null>>;
 };
 
@@ -66,16 +67,13 @@ export function MoviesProvider({
     // Default only if we're on home
     return pathname === "/" ? { name: "Popular", category: "popular" } : null;
   });
-  // ✅ get current route
-  console.log(pathname);
+
   // Reset active navlink when route changes
   useEffect(() => {
     if (pathname === "/") {
       if (!active) {
         setActive({ name: "Popular", category: "popular" });
       }
-    } else {
-      setActive(null);
     }
   }, [pathname]);
 
@@ -154,6 +152,7 @@ export function MoviesProvider({
         toggleFavorite,
         active,
         setActive,
+        setIsSearchMode,
       }}
     >
       {children}

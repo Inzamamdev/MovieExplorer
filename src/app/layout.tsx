@@ -35,12 +35,8 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem={true}
-          >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SessionProvider>
             <Toaster
               position="top-right"
               toastOptions={{
@@ -56,8 +52,8 @@ export default async function RootLayout({
               <Nav />
               <main>{children}</main>
             </MoviesProvider>
-          </ThemeProvider>
-        </SessionProvider>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
