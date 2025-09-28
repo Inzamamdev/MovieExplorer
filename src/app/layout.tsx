@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { MoviesProvider } from "@/context/MovieContext";
+import { FavouriteProvider } from "@/context/FavouriteContext";
 import Nav from "@/components/Nav";
 import { getMovies } from "@/app/actions/getMovies";
 import { SessionProvider } from "next-auth/react";
@@ -49,8 +50,10 @@ export default async function RootLayout({
               }}
             />
             <MoviesProvider initialMovies={initialMovies}>
-              <Nav />
-              <main>{children}</main>
+              <FavouriteProvider>
+                <Nav />
+                <main>{children}</main>
+              </FavouriteProvider>
             </MoviesProvider>
           </SessionProvider>
         </ThemeProvider>

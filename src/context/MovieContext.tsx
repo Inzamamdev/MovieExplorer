@@ -32,8 +32,6 @@ type MoviesContextType = {
   loadMoreMovies: () => Promise<void>;
   searchMovies: (query: string) => Promise<void>;
   resetMovies: () => Promise<void>;
-  favorites: Movie[];
-  toggleFavorite: (movie: Movie) => void;
   isSearchMode: boolean;
   loading: boolean;
   active: NavLinK;
@@ -51,7 +49,6 @@ export function MoviesProvider({
   children: React.ReactNode;
 }) {
   const [movies, setMovies] = useState<Movie[]>(initialMovies);
-  const [favorites, setFavorites] = useState<Movie[]>([]);
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -64,47 +61,14 @@ export function MoviesProvider({
       }
     }
 
-    // Default only if we're on home
     return pathname === "/" ? { name: "Popular", category: "popular" } : null;
   });
 
-  // Reset active navlink when route changes
   useEffect(() => {
-    if (pathname === "/") {
-      if (!active) {
-        setActive({ name: "Popular", category: "popular" });
-      }
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-  }, []);
-
-  // Sync favorites to localStorage
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
-
-  useEffect(() => {
-    // setMovies([]);
     localStorage.setItem("activeCategory", JSON.stringify(active));
 
     resetMovies();
   }, [active]);
-
-  const toggleFavorite = (movie: Movie) => {
-    setFavorites((prev) => {
-      const exists = prev.find((fav) => fav.id === movie.id);
-      if (exists) {
-        return prev.filter((fav) => fav.id !== movie.id); // remove
-      }
-      return [...prev, movie]; // add
-    });
-  };
 
   const loadMoreMovies = async () => {
     if (active?.category == null) return;
@@ -148,8 +112,6 @@ export function MoviesProvider({
         resetMovies,
         isSearchMode,
         loading,
-        favorites,
-        toggleFavorite,
         active,
         setActive,
         setIsSearchMode,
